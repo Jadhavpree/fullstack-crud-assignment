@@ -101,7 +101,7 @@ cd backend
 ./mvnw spring-boot:run
 ```
 
-The backend will start on `http://localhost:8080`
+The backend will start on `http://localhost:9090`
 
 ### Frontend Setup
 1. Navigate to the frontend directory:
@@ -225,8 +225,23 @@ CREATE TABLE products (
    - Check if database `product_db` exists
 
 2. **Port Already in Use:**
-   - Backend: Change port in application.properties: `server.port=8081`
-   - Frontend: Vite will automatically suggest alternative port
+   - **Backend Port Conflict**: If you get "Port already in use" error:
+     ```bash
+     # Find process using the port (replace 9090 with your port)
+     netstat -ano | findstr :9090
+     
+     # Kill the process (replace PID with actual process ID)
+     taskkill /PID <PID> /F
+     ```
+   - **Alternative**: Change port in `application.properties`:
+     ```properties
+     server.port=9091
+     ```
+     Then update frontend service URL in `frontend/src/services/productService.ts`:
+     ```typescript
+     const API_BASE_URL = 'http://localhost:9091/api/items';
+     ```
+   - **Frontend**: Vite will automatically suggest alternative port
 
 3. **CORS Issues:**
    - Ensure backend CORS configuration allows frontend origin
@@ -285,10 +300,10 @@ You can test the API endpoints using tools like Postman or curl:
 
 ```bash
 # Get all products
-curl -X GET http://localhost:8080/api/items
+curl -X GET http://localhost:9090/api/items
 
 # Create a new product
-curl -X POST http://localhost:8080/api/items \
+curl -X POST http://localhost:9090/api/items \
   -H "Content-Type: application/json" \
   -d '{"productName":"Test Product","price":29.99,"quantity":5,"description":"Test description"}'
 ```

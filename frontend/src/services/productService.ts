@@ -5,7 +5,7 @@
 import { Product, ProductFormData } from '@/types/product';
 
 // Your Spring Boot backend URL (change port if needed)
-const API_BASE_URL = 'http://localhost:8080/api/items';
+const API_BASE_URL = 'http://localhost:9090/api/items';
 
 // GET /api/items - Fetch all products
 export const getAllProducts = async (): Promise<Product[]> => {
